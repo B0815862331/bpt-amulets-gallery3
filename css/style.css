@@ -1,0 +1,185 @@
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+body { 
+    font-family: 'Kanit', sans-serif; 
+    min-height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                url('https://images.pexels.com/photos/19067354/pexels-photo-19067354.jpeg') no-repeat center center fixed;
+    background-size: cover; 
+    color: #fff; 
+    padding-bottom: 20px;
+    overflow-x: hidden;
+    user-select: none;
+}
+
+/* Security Status */
+.security-status {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 204, 136, 0.9);
+    color: #000;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.security-status.alert {
+    background: rgba(255, 100, 100, 0.9);
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* ปุ่มแอดมิน */
+.admin-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* การแจ้งเตือน */
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Modal ล็อกอิน */
+#adminLoginModal .modal-content {
+    max-width: 400px;
+}
+
+#adminPassword {
+    font-family: 'Kanit', monospace;
+    letter-spacing: 1px;
+    width: 100%;
+}
+
+/* ปุ่มแอดมินในโหมดต่างๆ */
+.add-photo-btn.admin-mode {
+    background: #ffc107;
+    color: #000;
+}
+
+.add-album-btn.admin-mode {
+    background: #ffc107;
+    color: #000;
+}
+
+/* Security Logs */
+.security-logs {
+    background: rgba(255,0,0,0.1);
+    border: 1px solid rgba(255,0,0,0.3);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    font-size: 0.85rem;
+}
+
+.security-log-item {
+    padding: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.security-log-item:last-child {
+    border-bottom: none;
+}
+
+.log-level-high {
+    color: #ff5555;
+    font-weight: bold;
+}
+
+.log-level-medium {
+    color: #ffaa00;
+}
+
+.log-level-low {
+    color: #55aaff;
+}
+
+/* ... CSS อื่นๆ ทั้งหมดจากโค้ดเดิม ... */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #top-controls { 
+        flex-direction: column; 
+        align-items: center; 
+    }
+    
+    input[type="text"], select { 
+        width: 100%; 
+    }
+    
+    #gallery { 
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+    }
+    
+    .modal-content {
+        padding: 15px;
+    }
+    
+    .security-status {
+        font-size: 0.7rem;
+        padding: 6px 10px;
+    }
+    
+    .admin-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #gallery { 
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
+        gap: 12px;
+    }
+    
+    .modal-content {
+        padding: 12px;
+    }
+    
+    .security-status {
+        display: none;
+    }
+    
+    .admin-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
