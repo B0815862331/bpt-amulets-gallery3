@@ -3,97 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📸 พระเครื่องแดนสยาม - แกลเลอรีผู้ใช้</title>
-    
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-                   img-src 'self' data: https:;
-                   font-src 'self' https://fonts.gstatic.com;
-                   connect-src 'self';
-                   frame-ancestors 'none';
-                   base-uri 'self';
-                   form-action 'self'">
-    
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap" rel="stylesheet">
+    <title>พระเครื่องแดนสยาม</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.pexels.com/photos/19067354/pexels-photo-19067354.jpeg') no-repeat center center fixed;
+            background-size: cover; 
+            color: #fff; 
+            padding: 20px;
+        }
+        header { 
+            text-align: center; 
+            padding: 1rem 0; 
+            font-size: 1.6rem; 
+            font-weight: bold; 
+            margin-bottom: 20px;
+        }
+        .tab-btn { 
+            padding: 0.6rem 1.2rem; 
+            margin: 0 5px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .tab-btn.active { background: #00cc88; color: #000; }
+        #top-controls { 
+            display: flex; 
+            gap: 12px; 
+            justify-content: center; 
+            margin: 1rem; 
+            padding: 1.2rem; 
+            background: rgba(0,0,0,0.6); 
+            border-radius: 12px; 
+        }
+        button {
+            background: #00cc88;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            font-family: 'Kanit';
+        }
+        #gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+            gap: 18px; 
+            margin-bottom: 2rem; 
+        }
+        .photo { 
+            background: rgba(30,30,30,0.8);
+            border-radius: 12px; 
+            overflow: hidden; 
+            cursor: pointer; 
+        }
+        .photo img { 
+            width: 100%; 
+            height: 180px; 
+            object-fit: cover; 
+        }
+        .photo-name { 
+            padding: 10px; 
+            background: rgba(0,0,0,0.7); 
+            text-align: center; 
+        }
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            z-index: 1000; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .modal-content { 
+            background: rgba(40,40,40,0.95); 
+            border-radius: 12px; 
+            padding: 20px; 
+            width: 90%; 
+            max-width: 500px; 
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group input, .form-group select { 
+            width: 100%; 
+            padding: 0.7rem; 
+            border: 1px solid #555; 
+            background: rgba(255,255,255,0.1); 
+            color: white; 
+            border-radius: 6px; 
+        }
+        .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 1.5rem; }
+    </style>
 </head>
 <body>
-    <!-- Security Status -->
-    <div class="security-status" id="securityStatus">
-        <i class="fas fa-shield-alt"></i>
-        <span>ระบบปลอดภัย</span>
-    </div>
-
-    <!-- GitHub Link -->
-    <a href="https://github.com/your-username/bpt-amulets-gallery" class="github-link" target="_blank">
-        <i class="fab fa-github"></i> View on GitHub
-    </a>
-
-    <!-- Audio Controls -->
-    <div class="audio-controls">
-        <button class="audio-btn" id="volumeBtn" onclick="app.toggleVolume()">
-            <i class="fas fa-volume-up"></i>
-        </button>
-        <button class="audio-btn" onclick="app.playWelcomeMessage()" title="เล่นเสียงต้อนรับอีกครั้ง">
-            <i class="fas fa-play"></i>
-        </button>
-    </div>
-
-    <header>
-        พระเครื่องแดนสยาม
-        <button class="welcome-message" onclick="app.playWelcomeMessage()" title="เล่นเสียงต้อนรับ">
-            <i class="fas fa-volume-up"></i>
-        </button>
-    </header>
+    <header>พระเครื่องแดนสยาม</header>
 
     <div id="app">
-        <!-- Tab Controls -->
         <div id="top-controls">
-            <button id="tabGallery" class="tab-btn active">Gallery รูป</button>
+            <button id="tabGallery" class="tab-btn active">Gallery</button>
             <button id="tabAlbums" class="tab-btn">อัลบั้ม</button>
             <button id="tabHistory" class="tab-btn">ประวัติ</button>
-            <button id="tabSecurity" class="tab-btn">ความปลอดภัย</button>
-            <select id="categorySelect"></select>
-            <input type="text" id="searchBox" placeholder="🔍 ค้นหา...">
-            <button class="add-album-btn" onclick="app.showCreateAlbumModal()">
-                <i class="fas fa-plus"></i> สร้างอัลบั้ม
-            </button>
-            <button class="add-photo-btn" onclick="app.showAddGalleryPhotoModal()">
-                <i class="fas fa-plus"></i> เพิ่มรูป
-            </button>
-            <button class="admin-btn" onclick="app.toggleAdminMenu()">
-                <i class="fas fa-user-shield"></i> ผู้ดูแลระบบ
-            </button>
+            <button class="add-photo-btn" onclick="app.showAddGalleryPhotoModal()">เพิ่มรูป</button>
         </div>
 
         <div id="gallery"></div>
-
-        <!-- Modals จะถูกเพิ่มที่นี่โดย JavaScript -->
         <div id="modals-container"></div>
     </div>
 
-    <footer>
-        <p>BPT AI โค้ดและไอเดียอุ๋ยบางแค | แกลเลอรีพระเครื่องแดนสยาม</p>
-    </footer>
-
-    <!-- Load JavaScript Files -->
-    <script src="js/utils.js"></script>
-    <script src="js/security.js"></script>
-    <script src="js/app.js"></script>
-    
-    <!-- Initialize App -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            app.initialize();
-        });
+        // ข้อมูลตัวอย่าง
+        const app = {
+            data: {
+                categories: {
+                    "พระยอดนิยม": [
+                        {
+                            "name": "พระบางลำพูน",
+                            "imageUrl": "https://images.unsplash.com/photo-1586947201838-5d66c1b94a5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YnVkZGhhfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+                            "createdAt": "2024-01-15T10:30:00Z"
+                        }
+                    ]
+                },
+                albums: {},
+                history: []
+            },
+            currentTab: 'gallery',
+
+            initialize() {
+                this.createModals();
+                this.setupEventListeners();
+                this.render();
+                console.log('✅ App started');
+            },
+
+            createModals() {
+                const modalsHTML = `
+                    <div id="addGalleryPhotoModal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>เพิ่มรูปภาพ</h3>
+                                <button class="modal-close" onclick="app.closeAddGalleryPhotoModal()">&times;</button>
+                            </div>
+                            <form id="addGalleryPhotoForm">
+                                <div class="form-group">
+                                    <label>ชื่อรูปภาพ</label>
+                                    <input type="text" id="galleryPhotoName" required placeholder="กรอกชื่อรูปภาพ">
+                                </div>
+                                <div class="form-group">
+                                    <label>หมวดหมู่</label>
+                                    <select id="galleryPhotoCategory" required>
+                                        <option value="">เลือกหมวดหมู่</option>
+                                        <option value="พระยอดนิยม">พระยอดนิยม</option>
+                                        <option value="พระกรุ">พระกรุ</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>URL รูปภาพ</label>
+                                    <input type="text" id="galleryPhotoURL" required placeholder="https://example.com/image.jpg">
+                                </div>
+                            </form>
+                            <div class="form-actions">
+                                <button type="button" onclick="app.closeAddGalleryPhotoModal()">ยกเลิก</button>
+                                <button type="button" onclick="app.saveGalleryPhoto()">บันทึกรูปภาพ</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('modals-container').innerHTML = modalsHTML;
+            },
+
+            setupEventListeners() {
+                // Tab events
+                document.getElementById('tabGallery').addEventListener('click', () => {
+                    this.currentTab = 'gallery';
+                    this.updateActiveTab();
+                    this.render();
+                });
+
+                document.getElementById('tabAlbums').addEventListener('click', () => {
+                    this.currentTab = 'albums';
+                    this.updateActiveTab();
+                    this.render();
+                });
+
+                document.getElementById('tabHistory').addEventListener('click', () => {
+                    this.currentTab = 'history';
+                    this.updateActiveTab();
+                    this.render();
+                });
+
+                // Global click to close modal
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('modal')) {
+                        e.target.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            },
+
+            updateActiveTab() {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById(`tab${this.currentTab.charAt(0).toUpperCase() + this.currentTab.slice(1)}`).classList.add('active');
+            },
+
+            render() {
+                const gallery = document.getElementById('gallery');
+                gallery.innerHTML = '';
+
+                if (this.currentTab === 'gallery') {
+                    this.renderGallery();
+                } else if (this.currentTab === 'albums') {
+                    this.renderAlbums();
+                } else if (this.currentTab === 'history') {
+                    this.renderHistory();
+                }
+            },
+
+            renderGallery() {
+                const gallery = document.getElementById('gallery');
+                Object.keys(this.data.categories).forEach(category => {
+                    this.data.categories[category].forEach(photo => {
+                        const div = document.createElement('div');
+                        div.className = 'photo';
+                        div.innerHTML = `
+                            <img src="${photo.imageUrl}" alt="${photo.name}">
+                            <div class="photo-name">${photo.name}</div>
+                        `;
+                        gallery.appendChild(div);
+                    });
+                });
+            },
+
+            renderAlbums() {
+                const gallery = document.getElementById('gallery');
+                gallery.innerHTML = '<div style="text-align:center;padding:2rem;">แสดงอัลบั้มทั้งหมด</div>';
+            },
+
+            renderHistory() {
+                const gallery = document.getElementById('gallery');
+                gallery.innerHTML = '<div style="text-align:center;padding:2rem;">แสดงประวัติการใช้งาน</div>';
+            },
+
+            showAddGalleryPhotoModal() {
+                document.getElementById('addGalleryPhotoModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            },
+
+            closeAddGalleryPhotoModal() {
+                document.getElementById('addGalleryPhotoModal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            },
+
+            saveGalleryPhoto() {
+                const name = document.getElementById('galleryPhotoName').value;
+                const category = document.getElementById('galleryPhotoCategory').value;
+                const url = document.getElementById('galleryPhotoURL').value;
+
+                if (!name || !category || !url) {
+                    alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                    return;
+                }
+
+                // สร้างหมวดหมู่ใหม่ถ้ายังไม่มี
+                if (!this.data.categories[category]) {
+                    this.data.categories[category] = [];
+                }
+
+                // เพิ่มรูปภาพ
+                this.data.categories[category].push({
+                    name: name,
+                    imageUrl: url,
+                    createdAt: new Date().toISOString()
+                });
+
+                // บันทึกลง localStorage
+                localStorage.setItem('bptAmuletsData', JSON.stringify(this.data));
+
+                this.closeAddGalleryPhotoModal();
+                this.render();
+                alert('✅ บันทึกรูปภาพเรียบร้อย!');
+            }
+        };
+
+        // เริ่มต้นแอปเมื่อโหลดหน้าเว็บ
+        document.addEventListener('DOMContentLoaded', () => app.initialize());
+        window.app = app;
     </script>
 </body>
 </html>
